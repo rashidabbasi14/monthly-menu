@@ -53,6 +53,21 @@
 </table>
 </div>
 
+<div class="modal-backdrop" id="mealModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription">
+    <button class="modal-close" id="closeModal" aria-label="Close recipe details">×</button>
+    <div class="modal-header">
+      <div class="modal-category" id="modalCategory">Meal details</div>
+      <h2 class="modal-title" id="modalTitle">Recipe title</h2>
+    </div>
+    <div class="modal-body">
+      <p class="modal-recipe" id="modalDescription">Recipe instructions will appear here.</p>
+      <h3>Ingredients</h3>
+      <ul class="modal-ingredients" id="modalIngredients"></ul>
+    </div>
+  </div>
+</div>
+
 <footer>
   <p>🌿 <strong>Tips for Weight Loss:</strong> Use less oil, avoid fried foods, prefer grilled/baked/boiled. Replace white rice with brown rice where possible. Use green tea instead of sugary drinks.</p>
   <br>
@@ -63,42 +78,76 @@
 const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
 
 const meals = [
-  { b:'French Toast (1 slice) + Green Tea', bl:'western', l:'Mixed Fruit Bowl (apple, banana, guava)', ll:'desi', d:'Gosht Shorba (broth, lean meat) + 1 Roti', dl:'desi', kcal:1380 },
-  { b:'Omelette (2 eggs) + 1 Paratha (thin) + Chai (no sugar)', bl:'desi', l:'Cucumber & Tomato Salad + Mint Chutney', ll:'desi', d:'Sabzi Stir-fry + 1 Cup Brown Rice', dl:'desi', kcal:1420 },
-  { b:'Oat Pancakes + Green Tea', bl:'mix', l:'Seasonal Fruit (papaya / orange)', ll:'desi', d:'Daal Mash + 1 Roti (no ghee)', dl:'desi', kcal:1350 },
-  { b:'Porridge (Daliya) + Orange Juice (1 glass)', bl:'desi', l:'Greek-style Salad (cucumber, olives, tomato)', ll:'western', d:'Grilled Chicken Tikka + Raita + Salad', dl:'desi', kcal:1480 },
-  { b:'Corn Flakes + Low-fat Milk', bl:'western', l:'Mixed Fruit (guava, apple, banana)', ll:'desi', d:'Grilled Fish + Steamed Vegetables', dl:'mix', kcal:1310 },
-  { b:'Scrambled Eggs (2) + Apple Juice (small)', bl:'western', l:'Green Salad + Lemon Dressing', ll:'western', d:'Karahi Murgh (light oil) + 1 Roti', dl:'desi', kcal:1450 },
-  { b:'Aloo Paratha (1, light oil) + Lassi (plain, no sugar)', bl:'desi', l:'Seasonal Fruit Chaat (no sugar)', ll:'desi', d:'Lobia Curry + Brown Rice (½ cup)', dl:'desi', kcal:1400 },
-  { b:'Boiled Eggs (2) + Whole Wheat Toast + Green Tea', bl:'mix', l:'Cucumber Raita + Mint', ll:'desi', d:'Mutton Yakhni Soup + 1 Roti', dl:'desi', kcal:1360 },
-  { b:'Smoothie Bowl (banana, yogurt, oats)', bl:'western', l:'Tomato Salad + Lemon', ll:'western', d:'Masoor Daal + 1 Roti', dl:'desi', kcal:1320 },
-  { b:'Vegetable Omelette + Chai (less sugar)', bl:'mix', l:'Fruit (papaya / melon)', ll:'desi', d:'Grilled Chicken Salad + Whole Wheat Roti', dl:'mix', kcal:1390 },
-  { b:'Overnight Oats + Honey + Seeds', bl:'western', l:'Roasted Chickpea Salad', ll:'mix', d:'Daal Chana + Brown Rice (½ cup)', dl:'desi', kcal:1410 },
-  { b:'Egg Bhurji (light oil) + 1 Roti + Green Tea', bl:'desi', l:'Mixed Fruit Bowl', ll:'desi', d:'Baked Fish + Steamed Sabzi', dl:'mix', kcal:1370 },
-  { b:'Yogurt Parfait (dahi, oats, fruit)', bl:'western', l:'Fattoush Salad', ll:'mix', d:'Chicken Karahi (light) + 1 Roti', dl:'desi', kcal:1460 },
-  { b:'Aloo Paratha (1) + Dahi (plain)', bl:'desi', l:'Seasonal Fruit', ll:'desi', d:'Sabzi Mix (bhindi / tori) + 1 Roti', dl:'desi', kcal:1340 },
-  { b:'Whole Wheat Crepes + Green Tea', bl:'mix', l:'Cucumber Mint Salad', ll:'desi', d:'Chicken Soup + 1 Slice Whole Wheat Bread', dl:'mix', kcal:1290 },
-  { b:'Daliya Porridge + Doodh (low-fat)', bl:'desi', l:'Apple + Handful Almonds', ll:'western', d:'Grilled Seekh Kabab (2) + Raita + Salad', dl:'desi', kcal:1440 },
-  { b:'Omelette Wrap (whole wheat roti, 2 eggs, veggies)', bl:'mix', l:'Mixed Fruit', ll:'desi', d:'Daal Mong + Brown Rice (½ cup)', dl:'desi', kcal:1360 },
-  { b:'Corn Flakes + Low-fat Milk + 1 Banana', bl:'western', l:'Green Salad + Olive Oil Dressing', ll:'western', d:'Mutton Shami Kabab (2) + Salad', dl:'desi', kcal:1420 },
-  { b:'Boiled Eggs (2) + Avocado Toast (if available)', bl:'western', l:'Seasonal Fruit', ll:'desi', d:'Grilled Tilapia + Steamed Veggies + 1 Roti', dl:'mix', kcal:1380 },
-  { b:'Smoothie (yogurt, banana, flax seeds)', bl:'western', l:'Cucumber Tomato Salad', ll:'western', d:'Karahi Sabzi (mix veg) + 1 Roti', dl:'desi', kcal:1320 },
-  { b:'Makki ki Roti (1) + Sarson ka Saag (small portion)', bl:'desi', l:'Fruit Chaat (no sugar, lemon)', ll:'desi', d:'Chicken Yakhni + 1 Whole Wheat Roti', dl:'desi', kcal:1390 },
-  { b:'Overnight Oats + Strawberries', bl:'western', l:'Mint Raita + Salad', ll:'desi', d:'Baked Chicken Legs + Grilled Vegetables', dl:'western', kcal:1430 },
-  { b:'Egg Bhurji + 1 Chapati + Green Tea', bl:'desi', l:'Mixed Fruit', ll:'desi', d:'Daal Chana + 1 Roti (no ghee)', dl:'desi', kcal:1350 },
-  { b:'Vegetable Upma (Dalia Khichdi)', bl:'mix', l:'Cucumber Salad + Lemon', ll:'western', d:'Chicken Shorba + 1 Slice Bread', dl:'mix', kcal:1300 },
-  { b:'Whole Wheat Toast + Peanut Butter + Green Tea', bl:'western', l:'Seasonal Fruit', ll:'desi', d:'Grilled Fish Fillet + Steamed Rice (½ cup)', dl:'mix', kcal:1400 },
-  { b:'Dahi (plain) + Oats + Honey', bl:'mix', l:'Green Salad + Chickpeas', ll:'mix', d:'Aloo Gosht (light, less oil) + 1 Roti', dl:'desi', kcal:1450 },
-  { b:'French Toast (whole wheat, 1 slice) + Green Tea', bl:'western', l:'Fruit Bowl', ll:'desi', d:'Grilled Chicken Salad Bowl', dl:'western', kcal:1360 },
-  { b:'Aloo Paratha (1, thin) + Lassi (plain)', bl:'desi', l:'Mixed Fruit Chaat', ll:'desi', d:'Daal Mix + Brown Rice (½ cup)', dl:'desi', kcal:1380 },
-  { b:'Omelette (2 eggs) + Whole Wheat Toast', bl:'mix', l:'Cucumber Raita + Mint', ll:'desi', d:'Chicken Tikka (grilled, 4 pcs) + Salad', dl:'desi', kcal:1440 },
-  { b:'Daliya Porridge + Orange Juice', bl:'desi', l:'Seasonal Fruit', ll:'desi', d:'Masoor Daal + 1 Roti (no ghee)', dl:'desi', kcal:1320 },
-  { b:'Smoothie (banana, yogurt, oats, honey)', bl:'western', l:'Greek Salad + Pita (½)', ll:'mix', d:'Baked Fish + Steamed Sabzi + Brown Rice (½ cup)', dl:'mix', kcal:1410 },
+  { b:'French Toast (1 slice) + Green Tea', b_recipe:'Dip whole wheat bread in beaten egg mixture and cook lightly in a non-stick pan. Top with minimal ghee and serve warm with green tea.', b_ingredients:['Whole wheat bread (1 slice)', 'Eggs (2)', 'Green tea (1 cup)'], bl:'western', l:'Mixed Fruit Bowl (apple, banana, guava)', l_recipe:'Chop fresh fruits into bite-sized pieces. Mix in a bowl and serve fresh, no added sugar.', l_ingredients:['Apple (1)', 'Banana (1)', 'Guava (1 medium)'], ll:'desi', d:'Gosht Shorba (broth, lean meat) + 1 Roti', d_recipe:'Boil lean meat pieces with spices and herbs in minimal oil until tender. Serve as broth with 1 whole wheat roti on the side.', d_ingredients:['Lean meat (150g)', 'Ginger-garlic paste (1 tsp)', '1 whole wheat roti', 'Spices to taste'], dl:'desi', kcal:1380 },
+  { b:'Omelette (2 eggs) + 1 Paratha (thin) + Chai (no sugar)', b_recipe:'Whisk 2 eggs with salt and pepper. Cook in a non-stick pan with minimal oil until golden. Serve with 1 thin paratha and sugar-free chai.', b_ingredients:['Eggs (2)', 'Whole wheat paratha (1, thin)', 'Chai (1 cup, no sugar)', 'Oil (1 tsp)'], bl:'desi', l:'Cucumber & Tomato Salad + Mint Chutney', l_recipe:'Slice cucumber and tomato. Arrange in a bowl and prepare fresh mint chutney with cilantro, green chilies, and lemon juice.', l_ingredients:['Cucumber (1 medium)', 'Tomato (2 medium)', 'Fresh mint (½ bunch)', 'Green chili (1)', 'Lemon juice (1 tbsp)'], ll:'desi', d:'Sabzi Stir-fry + 1 Cup Brown Rice', d_recipe:'Stir-fry mixed vegetables (spinach, fenugreek, peppers) with minimal oil and spices. Serve with 1 cup cooked brown rice.', d_ingredients:['Mixed greens (2 cups)', 'Bell peppers (1)', 'Onion (1)', 'Brown rice (1 cup cooked)', 'Oil (1 tsp)'], dl:'desi', kcal:1420 },
+  { b:'Oat Pancakes + Green Tea', b_recipe:'Mix oats, egg, and cinnamon. Cook on a non-stick pan until golden on both sides. Serve with green tea, no added sugar.', b_ingredients:['Rolled oats (½ cup)', 'Egg (1)', 'Cinnamon (½ tsp)', 'Green tea (1 cup)'], bl:'mix', l:'Seasonal Fruit (papaya / orange)', l_recipe:'Peel and slice fresh papaya or orange into bite-sized pieces. Serve immediately for maximum nutrients.', l_ingredients:['Papaya or Orange (1 medium)'], ll:'desi', d:'Daal Mash + 1 Roti (no ghee)', d_recipe:'Cook lentils with turmeric and spices until soft and mashed. Serve with 1 whole wheat roti cooked without ghee.', d_ingredients:['Masoor daal (½ cup)', 'Turmeric (½ tsp)', 'Whole wheat roti (1)', 'Spices to taste'], dl:'desi', kcal:1350 },
+  { b:'Porridge (Daliya) + Orange Juice (1 glass)', b_recipe:'Cook broken wheat with water and a pinch of salt until soft and creamy. Serve warm with 1 glass fresh orange juice.', b_ingredients:['Broken wheat (½ cup)', 'Water (1.5 cups)', 'Salt to taste', 'Orange juice (1 glass)'], bl:'desi', l:'Greek-style Salad (cucumber, olives, tomato)', l_recipe:'Chop cucumber, tomato, and add olives. Drizzle with lemon juice and minimal olive oil. Mix well.', l_ingredients:['Cucumber (1)', 'Tomato (2)', 'Olives (½ cup)', 'Lemon juice (1 tbsp)', 'Olive oil (1 tsp)'], ll:'western', d:'Grilled Chicken Tikka + Raita + Salad', d_recipe:'Marinate chicken in yogurt and spices for 30 minutes. Grill until cooked. Serve with cucumber raita and fresh salad.', d_ingredients:['Chicken breast (200g)', 'Yogurt (½ cup)', 'Spices (ginger, garlic, chili)', 'Cucumber raita', 'Mixed salad'], dl:'desi', kcal:1480 },
+  { b:'Corn Flakes + Low-fat Milk', b_recipe:'Pour corn flakes in a bowl and add 1 cup low-fat milk. Serve immediately.', b_ingredients:['Corn flakes (1 cup)', 'Low-fat milk (1 cup)'], bl:'western', l:'Mixed Fruit (guava, apple, banana)', l_recipe:'Wash and slice fresh fruits. Combine in a bowl and serve fresh without added sugar.', l_ingredients:['Guava (1)', 'Apple (1)', 'Banana (1)'], ll:'desi', d:'Grilled Fish + Steamed Vegetables', d_recipe:'Grill fish fillet with minimal oil and herbs. Steam mixed vegetables separately. Serve together.', d_ingredients:['Fish fillet (200g)', 'Broccoli (1 cup)', 'Carrots (1 medium)', 'Oil (1 tsp)', 'Herbs to taste'], dl:'mix', kcal:1310 },
+  { b:'Scrambled Eggs (2) + Apple Juice (small)', b_recipe:'Beat 2 eggs with salt and pepper. Cook in non-stick pan with minimal oil until scrambled. Serve with 1 small glass apple juice.', b_ingredients:['Eggs (2)', 'Oil (1 tsp)', 'Apple juice (1 small glass)'], bl:'western', l:'Green Salad + Lemon Dressing', l_recipe:'Mix lettuce, spinach, and cucumber. Prepare dressing with lemon juice and minimal olive oil.', l_ingredients:['Mixed greens (2 cups)', 'Cucumber (½)', 'Lemon juice (2 tbsp)', 'Olive oil (1 tsp)'], ll:'western', d:'Karahi Murgh (light oil) + 1 Roti', d_recipe:'Cook chicken pieces with tomatoes and peppers in minimal oil. Serve hot with 1 whole wheat roti.', d_ingredients:['Chicken (200g)', 'Tomatoes (2)', 'Bell peppers (1)', 'Oil (2 tsp)', 'Roti (1)'], dl:'desi', kcal:1450 },
+  { b:'Aloo Paratha (1, light oil) + Lassi (plain, no sugar)', b_recipe:'Make whole wheat dough, stuff with boiled potato and spices. Cook on griddle with minimal oil. Serve with plain lassi.', b_ingredients:['Whole wheat flour (1 cup)', 'Potato (1 medium)', 'Oil (1 tsp)', 'Plain lassi (1 cup, no sugar)'], bl:'desi', l:'Seasonal Fruit Chaat (no sugar)', l_recipe:'Chop fresh seasonal fruits, add lemon juice and black salt. Mix well and serve fresh.', l_ingredients:['Seasonal fruits (2 cups)', 'Lemon juice (1 tbsp)', 'Black salt (½ tsp)'], ll:'desi', d:'Lobia Curry + Brown Rice (½ cup)', d_recipe:'Cook kidney beans with tomatoes and spices in minimal oil. Serve with ½ cup cooked brown rice.', d_ingredients:['Kidney beans (1 cup cooked)', 'Tomatoes (2)', 'Spices to taste', 'Brown rice (½ cup cooked)', 'Oil (1 tsp)'], dl:'desi', kcal:1400 },
+  { b:'Boiled Eggs (2) + Whole Wheat Toast + Green Tea', b_recipe:'Boil 2 eggs until firm. Toast whole wheat bread lightly. Serve together with green tea.', b_ingredients:['Eggs (2)', 'Whole wheat bread (2 slices)', 'Green tea (1 cup)'], bl:'mix', l:'Cucumber Raita + Mint', l_recipe:'Grate cucumber and mix with plain yogurt, cumin, and fresh mint. Add salt to taste.', l_ingredients:['Cucumber (1 medium)', 'Yogurt (1 cup)', 'Fresh mint (¼ bunch)', 'Cumin (½ tsp)'], ll:'desi', d:'Mutton Yakhni Soup + 1 Roti', d_recipe:'Boil mutton pieces with spices in water until tender. Serve as broth with 1 roti.', d_ingredients:['Mutton (150g)', 'Ginger-garlic (1 tsp)', 'Spices to taste', 'Roti (1)'], dl:'desi', kcal:1360 },
+  { b:'Smoothie Bowl (banana, yogurt, oats)', b_recipe:'Blend banana with yogurt and milk. Pour in a bowl and top with oats and seeds.', b_ingredients:['Banana (1)', 'Yogurt (1 cup)', 'Milk (½ cup)', 'Oats (2 tbsp)', 'Seeds (1 tbsp)'], bl:'western', l:'Tomato Salad + Lemon', l_recipe:'Slice tomatoes and onions. Mix and dress with lemon juice and minimal oil.', l_ingredients:['Tomatoes (3)', 'Onion (1)', 'Lemon juice (2 tbsp)', 'Oil (1 tsp)'], ll:'western', d:'Masoor Daal + 1 Roti', d_recipe:'Cook red lentils with turmeric until soft. Serve with 1 whole wheat roti.', d_ingredients:['Red lentils (½ cup)', 'Turmeric (½ tsp)', 'Whole wheat roti (1)', 'Spices to taste'], dl:'desi', kcal:1320 },
+  { b:'Vegetable Omelette + Chai (less sugar)', b_recipe:'Make omelette with eggs and finely chopped vegetables. Cook in minimal oil. Serve with sugar-free chai.', b_ingredients:['Eggs (2)', 'Mixed vegetables (½ cup)', 'Oil (1 tsp)', 'Chai (1 cup, less sugar)'], bl:'mix', l:'Fruit (papaya / melon)', l_recipe:'Peel and cut fresh papaya or melon into chunks. Serve fresh and cold.', l_ingredients:['Papaya or Melon (1 medium)'], ll:'desi', d:'Grilled Chicken Salad + Whole Wheat Roti', d_recipe:'Grill chicken breast and slice. Mix with fresh vegetables and light dressing. Serve with roti.', d_ingredients:['Chicken breast (200g)', 'Mixed vegetables (2 cups)', 'Lemon dressing (2 tbsp)', 'Whole wheat roti (1)'], dl:'mix', kcal:1390 },
+  { b:'Overnight Oats + Honey + Seeds', b_recipe:'Mix oats with yogurt, milk, and honey. Refrigerate overnight. Top with seeds before serving.', b_ingredients:['Oats (½ cup)', 'Yogurt (½ cup)', 'Milk (½ cup)', 'Honey (1 tsp)', 'Seeds (1 tbsp)'], bl:'western', l:'Roasted Chickpea Salad', l_recipe:'Roast chickpeas with minimal oil and spices until crispy. Toss with chopped vegetables.', l_ingredients:['Chickpeas (1 cup)', 'Mixed vegetables (1 cup)', 'Oil (1 tsp)', 'Spices to taste'], ll:'mix', d:'Daal Chana + Brown Rice (½ cup)', d_recipe:'Cook mixed lentils and chickpeas with spices. Serve with ½ cup brown rice.', d_ingredients:['Mixed lentils (½ cup)', 'Chickpeas (½ cup)', 'Brown rice (½ cup cooked)', 'Spices to taste'], dl:'desi', kcal:1410 },
+  { b:'Egg Bhurji (light oil) + 1 Roti + Green Tea', b_recipe:'Scramble eggs with onions, tomatoes, and spices in minimal oil. Serve with roti and green tea.', b_ingredients:['Eggs (2)', 'Onion (1)', 'Tomato (1)', 'Oil (1 tsp)', 'Roti (1)', 'Green tea (1 cup)'], bl:'desi', l:'Mixed Fruit Bowl', l_recipe:'Combine sliced apple, banana, and berries. Serve fresh without added sugar.', l_ingredients:['Apple (1)', 'Banana (1)', 'Berries (½ cup)'], ll:'desi', d:'Baked Fish + Steamed Sabzi', d_recipe:'Bake fish fillet in oven with herbs. Steam mixed vegetables separately. Serve together.', d_ingredients:['Fish fillet (200g)', 'Mixed vegetables (2 cups)', 'Herbs to taste'], dl:'mix', kcal:1370 },
+  { b:'Yogurt Parfait (dahi, oats, fruit)', b_recipe:'Layer yogurt, oats, and fresh berries. Serve immediately for best texture.', b_ingredients:['Yogurt (1 cup)', 'Oats (¼ cup)', 'Berries (½ cup)'], bl:'western', l:'Fattoush Salad', l_recipe:'Mix mixed greens with tomatoes, cucumbers, and crispy whole wheat croutons. Dress with lemon vinaigrette.', l_ingredients:['Mixed greens (2 cups)', 'Tomatoes (1)', 'Cucumber (1)', 'Whole wheat croutons (2 tbsp)', 'Lemon vinaigrette (2 tbsp)'], ll:'mix', d:'Chicken Karahi (light) + 1 Roti', d_recipe:'Cook chicken with tomatoes and peppers in minimal oil. Finish with fresh cilantro. Serve with roti.', d_ingredients:['Chicken (200g)', 'Tomatoes (2)', 'Bell peppers (1)', 'Oil (2 tsp)', 'Cilantro (2 tbsp)', 'Roti (1)'], dl:'desi', kcal:1460 },
+  { b:'Aloo Paratha (1) + Dahi (plain)', b_recipe:'Make potato-stuffed paratha with minimal oil. Serve with plain yogurt.', b_ingredients:['Whole wheat flour (1 cup)', 'Potato (1 medium)', 'Oil (1 tsp)', 'Yogurt (½ cup)'], bl:'desi', l:'Seasonal Fruit', l_recipe:'Choose and serve 1-2 seasonal fruits fresh and whole or sliced.', l_ingredients:['Seasonal fruit (1-2 medium)'], ll:'desi', d:'Sabzi Mix (bhindi / tori) + 1 Roti', d_recipe:'Stir-fry mixed vegetables with minimal oil and spices. Serve with roti.', d_ingredients:['Okra (1 cup)', 'Bottle gourd (1 cup)', 'Onion (½)', 'Oil (1 tsp)', 'Roti (1)', 'Spices to taste'], dl:'desi', kcal:1340 },
+  { b:'Whole Wheat Crepes + Green Tea', b_recipe:'Make thin crepes from whole wheat flour. Serve rolled up with green tea.', b_ingredients:['Whole wheat flour (½ cup)', 'Egg (1)', 'Milk (½ cup)', 'Green tea (1 cup)'], bl:'mix', l:'Cucumber Mint Salad', l_recipe:'Slice cucumber and mix with fresh mint, lemon juice, and salt.', l_ingredients:['Cucumber (2 medium)', 'Fresh mint (½ bunch)', 'Lemon juice (2 tbsp)', 'Salt to taste'], ll:'desi', d:'Chicken Soup + 1 Slice Whole Wheat Bread', d_recipe:'Make clear chicken broth with vegetables and herbs. Serve hot with toasted bread.', d_ingredients:['Chicken (150g)', 'Mixed vegetables (1 cup)', 'Whole wheat bread (1 slice)', 'Broth (2 cups)', 'Herbs to taste'], dl:'mix', kcal:1290 },
+  { b:'Daliya Porridge + Doodh (low-fat)', b_recipe:'Cook broken wheat with water until soft and creamy. Serve warm with low-fat milk.', b_ingredients:['Broken wheat (½ cup)', 'Water (1.5 cups)', 'Low-fat milk (1 cup)', 'Salt to taste'], bl:'desi', l:'Apple + Handful Almonds', l_recipe:'Slice apple and serve with raw almonds. Eat fresh.', l_ingredients:['Apple (1 large)', 'Almonds (15-20)'], ll:'western', d:'Grilled Seekh Kabab (2) + Raita + Salad', d_recipe:'Make seekh kabab with minced meat and spices, grill on skewers. Serve with raita and salad.', d_ingredients:['Minced meat (150g)', 'Spices to taste', 'Cucumber raita (½ cup)', 'Mixed salad (1 cup)'], dl:'desi', kcal:1440 },
+  { b:'Omelette Wrap (whole wheat roti, 2 eggs, veggies)', b_recipe:'Make omelette with vegetables, wrap in warm roti. Serve hot.', b_ingredients:['Eggs (2)', 'Whole wheat roti (1)', 'Mixed vegetables (½ cup)', 'Oil (1 tsp)'], bl:'mix', l:'Mixed Fruit', l_recipe:'Combine sliced apple, banana, orange, and grapes. Serve fresh.', l_ingredients:['Apple (1)', 'Banana (1)', 'Orange (1)', 'Grapes (½ cup)'], ll:'desi', d:'Daal Mong + Brown Rice (½ cup)', d_recipe:'Cook mung lentils with spices until soft. Serve with ½ cup brown rice.', d_ingredients:['Mung lentils (½ cup)', 'Brown rice (½ cup cooked)', 'Spices to taste'], dl:'desi', kcal:1360 },
+  { b:'Corn Flakes + Low-fat Milk + 1 Banana', b_recipe:'Pour corn flakes in a bowl, add milk, and top with banana slices.', b_ingredients:['Corn flakes (1 cup)', 'Low-fat milk (1 cup)', 'Banana (1)'], bl:'western', l:'Green Salad + Olive Oil Dressing', l_recipe:'Mix fresh greens with cucumber and tomato. Drizzle with olive oil and vinegar.', l_ingredients:['Mixed greens (2 cups)', 'Cucumber (½)', 'Tomato (1)', 'Olive oil (1 tsp)', 'Vinegar (1 tbsp)'], ll:'western', d:'Mutton Shami Kabab (2) + Salad', d_recipe:'Make spiced mutton kababs and grill or pan-fry. Serve with fresh salad.', d_ingredients:['Minced mutton (150g)', 'Spices to taste', 'Fresh salad (1 cup)'], dl:'desi', kcal:1420 },
+  { b:'Boiled Eggs (2) + Avocado Toast (if available)', b_recipe:'Boil 2 eggs and mash with salt. Spread on toasted whole wheat bread with avocado.', b_ingredients:['Eggs (2)', 'Whole wheat bread (1 slice)', 'Avocado (½)'], bl:'western', l:'Seasonal Fruit', l_recipe:'Select and serve 1-2 medium fresh seasonal fruits.', l_ingredients:['Seasonal fruit (1-2 medium)'], ll:'desi', d:'Grilled Tilapia + Steamed Veggies + 1 Roti', d_recipe:'Grill tilapia fillet with herbs. Steam vegetables. Serve with roti.', d_ingredients:['Tilapia fillet (200g)', 'Mixed vegetables (1.5 cups)', 'Herbs to taste', 'Whole wheat roti (1)'], dl:'mix', kcal:1380 },
+  { b:'Smoothie (yogurt, banana, flax seeds)', b_recipe:'Blend yogurt, banana, and flax seeds with milk. Serve immediately.', b_ingredients:['Yogurt (1 cup)', 'Banana (1)', 'Flax seeds (1 tbsp)', 'Milk (½ cup)'], bl:'western', l:'Cucumber Tomato Salad', l_recipe:'Dice cucumber and tomato. Mix with lemon juice and minimal salt.', l_ingredients:['Cucumber (1 large)', 'Tomato (2)', 'Lemon juice (2 tbsp)'], ll:'western', d:'Karahi Sabzi (mix veg) + 1 Roti', d_recipe:'Stir-fry mixed vegetables in minimal oil with spices. Serve hot with roti.', d_ingredients:['Mixed vegetables (3 cups)', 'Oil (1.5 tsp)', 'Spices to taste', 'Whole wheat roti (1)'], dl:'desi', kcal:1320 },
+  { b:'Makki ki Roti (1) + Sarson ka Saag (small portion)', b_recipe:'Make cornmeal roti and serve with small portion of sautéed spinach in minimal oil.', b_ingredients:['Cornmeal (½ cup)', 'Spinach (1 cup)', 'Oil (1 tsp)', 'Salt and spices to taste'], bl:'desi', l:'Fruit Chaat (no sugar, lemon)', l_recipe:'Chop fruits and mix with lemon juice, salt, and spices. Serve fresh.', l_ingredients:['Mixed fruits (2 cups)', 'Lemon juice (2 tbsp)', 'Salt and spices to taste'], ll:'desi', d:'Chicken Yakhni + 1 Whole Wheat Roti', d_recipe:'Make clear chicken broth with spices. Serve hot with roti.', d_ingredients:['Chicken (150g)', 'Ginger-garlic (1 tsp)', 'Broth (2 cups)', 'Whole wheat roti (1)', 'Spices to taste'], dl:'desi', kcal:1390 },
+  { b:'Overnight Oats + Strawberries', b_recipe:'Mix oats with yogurt and milk. Refrigerate overnight. Top with fresh strawberries.', b_ingredients:['Oats (½ cup)', 'Yogurt (½ cup)', 'Milk (½ cup)', 'Strawberries (½ cup)'], bl:'western', l:'Mint Raita + Salad', l_recipe:'Mix yogurt with grated cucumber, mint, and spices. Serve with fresh salad.', l_ingredients:['Yogurt (1 cup)', 'Cucumber (1 medium)', 'Fresh mint (¼ bunch)', 'Mixed salad (1 cup)', 'Spices to taste'], ll:'desi', d:'Baked Chicken Legs + Grilled Vegetables', d_recipe:'Bake chicken legs with herbs. Grill vegetables separately. Serve together.', d_ingredients:['Chicken legs (2)', 'Mixed vegetables (2 cups)', 'Herbs to taste'], dl:'western', kcal:1430 },
+  { b:'Egg Bhurji + 1 Chapati + Green Tea', b_recipe:'Scramble eggs with onions and tomatoes in minimal oil. Serve with chapati and green tea.', b_ingredients:['Eggs (2)', 'Onion (1)', 'Tomato (1)', 'Oil (1 tsp)', 'Chapati (1)', 'Green tea (1 cup)'], bl:'desi', l:'Mixed Fruit', l_recipe:'Slice and mix fresh fruits. Serve without added sugar.', l_ingredients:['Assorted fruits (2 cups)'], ll:'desi', d:'Daal Chana + 1 Roti (no ghee)', d_recipe:'Cook mixed lentils and chickpeas with spices. Serve with roti made without ghee.', d_ingredients:['Mixed lentils (½ cup)', 'Chickpeas (½ cup)', 'Whole wheat roti (1)', 'Spices to taste'], dl:'desi', kcal:1350 },
+  { b:'Vegetable Upma (Dalia Khichdi)', b_recipe:'Cook broken wheat with vegetables and minimal oil until soft. Season with spices and lemon juice.', b_ingredients:['Broken wheat (½ cup)', 'Mixed vegetables (1 cup)', 'Oil (1 tsp)', 'Lemon juice (1 tbsp)', 'Spices to taste'], bl:'mix', l:'Cucumber Salad + Lemon', l_recipe:'Slice cucumber thinly and dress with lemon juice, salt, and spices.', l_ingredients:['Cucumber (2 medium)', 'Lemon juice (2 tbsp)', 'Salt to taste'], ll:'western', d:'Chicken Shorba + 1 Slice Bread', d_recipe:'Make light chicken broth with vegetables. Serve hot with whole wheat bread.', d_ingredients:['Chicken (150g)', 'Mixed vegetables (1 cup)', 'Whole wheat bread (1 slice)', 'Broth (2 cups)', 'Herbs to taste'], dl:'mix', kcal:1300 },
+  { b:'Whole Wheat Toast + Peanut Butter + Green Tea', b_recipe:'Toast whole wheat bread and spread thin layer of peanut butter. Serve with green tea.', b_ingredients:['Whole wheat bread (2 slices)', 'Peanut butter (1 tbsp)', 'Green tea (1 cup)'], bl:'western', l:'Seasonal Fruit', l_recipe:'Choose 1-2 fresh seasonal fruits and serve whole or sliced.', l_ingredients:['Seasonal fruit (1-2 medium)'], ll:'desi', d:'Grilled Fish Fillet + Steamed Rice (½ cup)', d_recipe:'Grill fish fillet with minimal oil and herbs. Serve with steamed rice.', d_ingredients:['Fish fillet (200g)', 'Brown rice (½ cup cooked)', 'Herbs to taste', 'Oil (1 tsp)'], dl:'mix', kcal:1400 },
+  { b:'Dahi (plain) + Oats + Honey', b_recipe:'Serve plain yogurt topped with oats and drizzle of honey.', b_ingredients:['Plain yogurt (1 cup)', 'Oats (¼ cup)', 'Honey (1 tsp)'], bl:'mix', l:'Green Salad + Chickpeas', l_recipe:'Mix fresh greens with chickpeas, vegetables, and light dressing.', l_ingredients:['Mixed greens (2 cups)', 'Chickpeas (½ cup)', 'Mixed vegetables (1 cup)', 'Light dressing (1 tbsp)'], ll:'mix', d:'Aloo Gosht (light, less oil) + 1 Roti', d_recipe:'Cook potato and meat curry using minimal oil. Serve with roti.', d_ingredients:['Meat (150g)', 'Potato (2 medium)', 'Oil (1.5 tsp)', 'Spices to taste', 'Whole wheat roti (1)'], dl:'desi', kcal:1450 },
+  { b:'French Toast (whole wheat, 1 slice) + Green Tea', b_recipe:'Dip whole wheat bread in egg mixture and cook lightly. Serve with green tea.', b_ingredients:['Whole wheat bread (1 slice)', 'Egg (1)', 'Cinnamon (½ tsp)', 'Green tea (1 cup)'], bl:'western', l:'Fruit Bowl', l_recipe:'Combine sliced fruits in a bowl. Serve fresh.', l_ingredients:['Mixed fruits (2 cups)'], ll:'desi', d:'Grilled Chicken Salad Bowl', d_recipe:'Grill chicken breast and slice. Mix with fresh vegetables and light dressing in a bowl.', d_ingredients:['Chicken breast (200g)', 'Mixed vegetables (2 cups)', 'Light dressing (2 tbsp)'], dl:'western', kcal:1360 },
+  { b:'Aloo Paratha (1, thin) + Lassi (plain)', b_recipe:'Make thin potato-stuffed paratha with minimal oil. Serve with plain lassi.', b_ingredients:['Whole wheat flour (1 cup)', 'Potato (1 medium)', 'Oil (1 tsp)', 'Plain lassi (1 cup)'], bl:'desi', l:'Mixed Fruit Chaat', l_recipe:'Chop fruits and mix with lemon juice, salt, and spices. Serve immediately.', l_ingredients:['Mixed fruits (2 cups)', 'Lemon juice (2 tbsp)', 'Salt and spices to taste'], ll:'desi', d:'Daal Mix + Brown Rice (½ cup)', d_recipe:'Cook mixed lentils with spices. Serve with ½ cup brown rice.', d_ingredients:['Mixed lentils (½ cup)', 'Brown rice (½ cup cooked)', 'Spices to taste'], dl:'desi', kcal:1380 },
+  { b:'Omelette (2 eggs) + Whole Wheat Toast', b_recipe:'Make omelette with 2 eggs and minimal oil. Serve with toasted whole wheat bread.', b_ingredients:['Eggs (2)', 'Whole wheat bread (1 slice)', 'Oil (1 tsp)', 'Salt and pepper to taste'], bl:'mix', l:'Cucumber Raita + Mint', l_recipe:'Mix grated cucumber with yogurt, cumin, and fresh mint.', l_ingredients:['Cucumber (1 medium)', 'Yogurt (1 cup)', 'Fresh mint (¼ bunch)', 'Cumin (½ tsp)'], ll:'desi', d:'Chicken Tikka (grilled, 4 pcs) + Salad', d_recipe:'Grill marinated chicken tikka pieces. Serve with fresh mixed salad.', d_ingredients:['Chicken breast (200g)', 'Yogurt marinade (½ cup)', 'Spices to taste', 'Mixed salad (1.5 cups)'], dl:'desi', kcal:1440 },
+  { b:'Daliya Porridge + Orange Juice', b_recipe:'Cook broken wheat in water until creamy. Serve warm with fresh orange juice.', b_ingredients:['Broken wheat (½ cup)', 'Water (1.5 cups)', 'Salt to taste', 'Orange juice (1 glass)'], bl:'desi', l:'Seasonal Fruit', l_recipe:'Select and serve fresh seasonal fruit(s).', l_ingredients:['Seasonal fruit (1-2 medium)'], ll:'desi', d:'Masoor Daal + 1 Roti (no ghee)', d_recipe:'Cook red lentils with turmeric and spices. Serve with roti made without ghee.', d_ingredients:['Red lentils (½ cup)', 'Turmeric (½ tsp)', 'Whole wheat roti (1)', 'Spices to taste'], dl:'desi', kcal:1320 },
+  { b:'Smoothie (banana, yogurt, oats, honey)', b_recipe:'Blend banana, yogurt, oats, and honey with milk. Serve immediately.', b_ingredients:['Banana (1)', 'Yogurt (1 cup)', 'Oats (¼ cup)', 'Honey (1 tsp)', 'Milk (½ cup)'], bl:'western', l:'Greek Salad + Pita (½)', l_recipe:'Mix tomato, cucumber, olives, and feta. Serve with ½ pita bread.', l_ingredients:['Tomato (2)', 'Cucumber (1)', 'Olives (¼ cup)', 'Feta cheese (¼ cup)', 'Pita bread (½)'], ll:'mix', d:'Baked Fish + Steamed Sabzi + Brown Rice (½ cup)', d_recipe:'Bake fish fillet with herbs. Steam mixed vegetables. Serve with brown rice.', d_ingredients:['Fish fillet (200g)', 'Mixed vegetables (2 cups)', 'Brown rice (½ cup cooked)', 'Herbs to taste'], dl:'mix', kcal:1410 },
 ];
 
 const tagMap = { desi:'tag-desi', western:'tag-western', mix:'tag-mix' };
 const tagLabel = { desi:'Desi', western:'Western', mix:'Fusion' };
+const mealName = { b:'Breakfast', l:'Lunch', d:'Dinner' };
 const weekLabels = ['Week 1 — Days 1–7','Week 2 — Days 8–14','Week 3 — Days 15–21','Week 4 — Days 22–28','Final Stretch — Days 29–31'];
+
+const modal = document.getElementById('mealModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalCategory = document.getElementById('modalCategory');
+const modalRecipe = document.getElementById('modalDescription');
+const modalIngredients = document.getElementById('modalIngredients');
+const closeModal = document.getElementById('closeModal');
+
+function openModal(index, mealKey) {
+  const meal = meals[index];
+  const recipeKey = mealKey + '_recipe';
+  const ingredientsKey = mealKey + '_ingredients';
+
+  modalCategory.textContent = mealName[mealKey];
+  modalTitle.textContent = meal[mealKey];
+  modalRecipe.textContent = meal[recipeKey];
+  modalIngredients.innerHTML = meal[ingredientsKey].map(item => `<li>${item}</li>`).join('');
+  modal.classList.add('active');
+}
+
+function closeMealModal() {
+  modal.classList.remove('active');
+}
+
+closeModal.addEventListener('click', closeMealModal);
+modal.addEventListener('click', e => {
+  if (e.target === modal) closeMealModal();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && modal.classList.contains('active')) {
+    closeMealModal();
+  }
+});
 
 const tbody = document.getElementById('mealBody');
 let html = '';
@@ -114,19 +163,19 @@ meals.forEach((m, i) => {
       </div>
     </td>
     <td>
-      <div class="meal-cell">
+      <div class="meal-cell clickable" data-index="${i}" data-meal="b" role="button" tabindex="0">
         <div class="meal-main">${m.b}</div>
         <span class="tag ${tagMap[m.bl]}">${tagLabel[m.bl]}</span>
       </div>
     </td>
     <td>
-      <div class="meal-cell">
+      <div class="meal-cell clickable" data-index="${i}" data-meal="l" role="button" tabindex="0">
         <div class="meal-main">${m.l}</div>
         <span class="tag ${tagMap[m.ll]}">${tagLabel[m.ll]}</span>
       </div>
     </td>
     <td>
-      <div class="meal-cell">
+      <div class="meal-cell clickable" data-index="${i}" data-meal="d" role="button" tabindex="0">
         <div class="meal-main">${m.d}</div>
         <span class="tag ${tagMap[m.dl]}">${tagLabel[m.dl]}</span>
       </div>
@@ -136,6 +185,21 @@ meals.forEach((m, i) => {
 });
 
 tbody.innerHTML = html;
+
+tbody.addEventListener('click', event => {
+  const cell = event.target.closest('.meal-cell.clickable');
+  if (!cell) return;
+  openModal(cell.dataset.index, cell.dataset.meal);
+});
+
+tbody.addEventListener('keydown', event => {
+  const cell = event.target.closest('.meal-cell.clickable');
+  if (!cell) return;
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    openModal(cell.dataset.index, cell.dataset.meal);
+  }
+});
 
 // ===== TODAY AUTO SCROLL + HIGHLIGHT =====
 
